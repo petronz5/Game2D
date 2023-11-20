@@ -34,11 +34,14 @@ public class GamePanel extends JPanel implements Runnable{
     TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler();
     Sound sound = new Sound();
+    Sound se = new Sound();
+    public UI ui = new UI(this);
     Thread gameThread;
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
     public Player player = new Player(this, keyH);
     public SuperObject[] obj = new SuperObject[10];
+
 
     //Set player's default position
     int playerX = 100;
@@ -139,6 +142,10 @@ public class GamePanel extends JPanel implements Runnable{
         }
         //PLAYER
         player.draw(g2);
+
+        //UI
+        ui.draw(g2);
+
         g2.dispose();
     }
 
