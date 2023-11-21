@@ -4,6 +4,7 @@ import object.OBJ_Key;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.text.DecimalFormat;
 
 public class UI {
 
@@ -14,13 +15,15 @@ public class UI {
     public String message = "";
     public int messageCounter = 0;
     public boolean gameFinished = false;
+    double playTime;
+    DecimalFormat dFormat = new DecimalFormat("#0.00");
 
 
     public UI(GamePanel gp){
         this.gp = gp;
 
         arial_40 = new Font("Arial" , Font.PLAIN , 40);
-        OBJ_Key key = new OBJ_Key();
+        OBJ_Key key = new OBJ_Key(gp);
         image = key.image;
     }
 
@@ -31,6 +34,8 @@ public class UI {
 
     public void draw(Graphics2D g2) {
 
+        int x = 0;
+        int y = 0;
         if (gameFinished == true) {
 
             g2.setFont(arial_40);
@@ -38,15 +43,18 @@ public class UI {
 
             String text;
             int textLength;
-            int x;
-            int y;
 
             text = "You found the treasure";
-            textLength = (int)g2.getFontMetrics().getStringBounds(text , g2).getWidth();
+            textLength = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+            x = gp.screenWidth / 2 - textLength / 2;
+            y = gp.screenHeight / 2 - (gp.tileSize * 3);
+            g2.drawString(text, x, y);
 
-            x = gp.screenWidth/2 - textLength/2;
-            y = gp.screenHeight/2 - (gp.tileSize*3);
-            g2.drawString(text ,x , y);
+            text = "Your time is: " +dFormat.format(playTime) + "!";
+            textLength = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+            x = gp.screenWidth / 2 - textLength / 2;
+            y = gp.screenHeight / 2 - (gp.tileSize * 4);
+            g2.drawString(text, x, y);
 
             gp.gameThread = null;
 
@@ -55,6 +63,10 @@ public class UI {
             g2.setColor(Color.white);
             g2.drawString("Key = " + gp.player.hasKey, 50, 50);
             g2.drawImage(image, gp.tileSize / 2, gp.tileSize / 2, gp.tileSize, gp.tileSize, null);
+
+            //TIME
+            playTime += (double) 1 / 60;
+            g2.drawString("Time:" + dFormat.format(playTime), gp.tileSize*11, 65);
 
             //MESSAGE
             if (messageOn == true) {
