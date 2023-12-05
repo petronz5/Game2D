@@ -58,6 +58,9 @@ public class GamePanel extends JPanel implements Runnable{
     public final int playState = 1;
     public final int pauseState = 2;
     public final int dialogueState = 3;
+    public int characterState = 4;
+
+
 
     //Set player's default position
     int playerX = 100;
@@ -139,7 +142,12 @@ public class GamePanel extends JPanel implements Runnable{
 
             for(int i = 0; i < monster.length; i++){
                 if(monster[i] != null){
-                    entityList.add(monster[i]);
+                    if(monster[i].alive == true && monster[i].dying == false) {
+                        monster[i].update();
+                    }
+                    if(monster[i].alive == false) {
+                        monster[i].update();
+                    }
                 }
             }
         }
@@ -202,9 +210,7 @@ public class GamePanel extends JPanel implements Runnable{
                 entityList.get(i).draw(g2);
             }
             //EMPTY ENTITY LIST
-            for(int i = 0; i < entityList.size(); i++){
-                entityList.remove(i);
-            }
+            entityList.clear();
 
             //UI
             ui.draw(g2);
